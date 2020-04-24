@@ -3,9 +3,9 @@ package tests
 import (
 	"fmt"
 	"github.com/fatih/structs"
-	"github.com/nuweba/httpbench"
-	"github.com/nuweba/httpbench/engine"
-	"github.com/nuweba/httpbench/syncedtrace"
+	"github.com/nropatas/httpbench"
+	"github.com/nropatas/httpbench/engine"
+	"github.com/nropatas/httpbench/syncedtrace"
 	"github.com/pkg/errors"
 	"sort"
 	"strings"

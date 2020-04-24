@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/nuweba/counter"
-	"github.com/nuweba/httpbench/syncedtrace"
+	"github.com/nropatas/httpbench/syncedtrace"
 	"net/http"
 	"net/http/httptest"
 	"sync"

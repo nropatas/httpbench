@@ -1,7 +1,7 @@
 package engine
 
 import (
-	"github.com/nuweba/httpbench/syncedtrace"
+	"github.com/nropatas/httpbench/syncedtrace"
 	"io/ioutil"
 	"net/http"
 	"time"

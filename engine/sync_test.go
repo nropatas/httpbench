@@ -3,7 +3,7 @@ package engine
 import (
 	"fmt"
 	"github.com/nuweba/counter"
-	"github.com/nuweba/httpbench/syncedtrace"
+	"github.com/nropatas/httpbench/syncedtrace"
 	"net/http"
 	"testing"
 	"time"

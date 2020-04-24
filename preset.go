@@ -1,11 +1,12 @@
 package httpbench
 
 import (
-	"github.com/nuweba/httpbench/engine"
-	"github.com/nuweba/httpbench/syncedtrace"
 	"math/rand"
 	"net/http"
 	"time"
+
+	"github.com/nropatas/httpbench/engine"
+	"github.com/nropatas/httpbench/syncedtrace"
 )
 
 type Preset struct {

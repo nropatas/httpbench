@@ -4,12 +4,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/nuweba/httpbench/syncedtrace"
 	"net"
 	"net/http"
 	"net/http/httptrace"
 	"syscall"
 	"time"
+
+	"github.com/nropatas/httpbench/syncedtrace"
 )
 
 func updateLocalAddrToPort(th *syncedtrace.Trace, fd int) error {

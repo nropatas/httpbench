@@ -2,8 +2,8 @@ package engine
 
 import (
 	"github.com/nuweba/counter"
-	"github.com/nuweba/httpbench/concurrency"
-	"github.com/nuweba/httpbench/syncedtrace"
+	"github.com/nropatas/httpbench/concurrency"
+	"github.com/nropatas/httpbench/syncedtrace"
 	"time"
 )
 

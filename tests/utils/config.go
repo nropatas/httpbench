@@ -3,9 +3,9 @@ package tests
 import (
 	"bytes"
 	"fmt"
-	"github.com/nuweba/httpbench"
-	"github.com/nuweba/httpbench/engine"
-	"github.com/nuweba/httpbench/syncedtrace"
+	"github.com/nropatas/httpbench"
+	"github.com/nropatas/httpbench/engine"
+	"github.com/nropatas/httpbench/syncedtrace"
 	"net/http/httptest"
 	"net/http/httputil"
 	"time"

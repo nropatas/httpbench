@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/nuweba/httpbench/syncedtrace"
-	tests "github.com/nuweba/httpbench/tests/utils"
+	"github.com/nropatas/httpbench/syncedtrace"
+	tests "github.com/nropatas/httpbench/tests/utils"
 	"time"
 )
 

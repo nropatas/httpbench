@@ -2,9 +2,9 @@ package tests
 
 import (
 	"fmt"
-	"github.com/nuweba/httpbench"
-	"github.com/nuweba/httpbench/syncedtrace"
-	utils "github.com/nuweba/httpbench/tests/utils"
+	"github.com/nropatas/httpbench"
+	"github.com/nropatas/httpbench/syncedtrace"
+	utils "github.com/nropatas/httpbench/tests/utils"
 	"github.com/pkg/errors"
 	"strings"
 	"sync"

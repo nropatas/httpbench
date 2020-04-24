@@ -1,7 +1,7 @@
 package httpbench
 
 import (
-	"github.com/nuweba/httpbench/syncedtrace"
+	"github.com/nropatas/httpbench/syncedtrace"
 	"net/http"
 	"testing"
 )

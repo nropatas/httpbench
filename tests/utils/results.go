@@ -3,7 +3,7 @@ package tests
 import (
 	"errors"
 	"fmt"
-	"github.com/nuweba/httpbench/syncedtrace"
+	"github.com/nropatas/httpbench/syncedtrace"
 	"reflect"
 	"sync"
 	"time"
