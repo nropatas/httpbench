@@ -2,6 +2,7 @@ package engine
 
 import (
 	"context"
+	"crypto/tls"
 	"errors"
 	"fmt"
 	"net"
@@ -46,7 +47,7 @@ func wrapError(old, new error) error {
 	return fmt.Errorf("%s;; previous error: %s", new.Error(), old.Error())
 }
 
-func doRequest(newReq func(uniqueId string) (*http.Request, error), syncConfig *SyncConfig) {
+func doRequest(newReq func(uniqueId string) (*http.Request, error), syncConfig *SyncConfig, tlsConfig *tls.Config) {
 	defer syncConfig.done.Done()
 
 	th := syncedtrace.New(syncConfig.reqCounter.Inc(), syncConfig.traceSync)
@@ -83,6 +84,7 @@ func doRequest(newReq func(uniqueId string) (*http.Request, error), syncConfig *
 		Proxy:                 http.ProxyFromEnvironment,
 		MaxIdleConns:          0,
 		IdleConnTimeout:       0,
+		TLSClientConfig:       tlsConfig,
 		TLSHandshakeTimeout:   20 * time.Second,
 		ResponseHeaderTimeout: 20 * time.Second,
 		ExpectContinueTimeout: 1 * time.Second,
@@ -111,7 +113,7 @@ func doRequest(newReq func(uniqueId string) (*http.Request, error), syncConfig *
 	syncConfig.result <- result
 }
 
-func HttpBench(sc *SyncConfig, reqDelay time.Duration, newReq func(uniqueId string) (*http.Request, error)) {
+func HttpBench(sc *SyncConfig, reqDelay time.Duration, newReq func(uniqueId string) (*http.Request, error), tlsConfig *tls.Config) {
 	if !sc.Concurrency.IsConcurrencyUnlimited() && sc.syncedConcurrent > sc.concurrencyLimit {
 		panic("synced concurrent cannot be bigger then the concurrency limit")
 	}
@@ -132,7 +134,7 @@ outer:
 			sc.Concurrency.AcquireConcurrencySlot()
 			sc.traceSync.ReadyWg.Add(1)
 			sc.done.Add(1)
-			go doRequest(newReq, sc)
+			go doRequest(newReq, sc, tlsConfig)
 		}
 
 		sc.traceSync.ReadyWg.Wait()

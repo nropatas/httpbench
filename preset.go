@@ -1,6 +1,7 @@
 package httpbench
 
 import (
+	"crypto/tls"
 	"math/rand"
 	"net/http"
 	"time"
@@ -13,6 +14,7 @@ type Preset struct {
 	ResultCh   chan *engine.TraceResult
 	NewRequest func(uniqueId string) (*http.Request, error)
 	Hook       syncedtrace.TraceHookType
+	TLSConfig  *tls.Config
 }
 
 type PresetResult struct {
@@ -45,9 +47,9 @@ func (pt PresetType) String() string {
 	}[pt]
 }
 
-func New(newRequest func(uniqueId string) (*http.Request, error), hook syncedtrace.TraceHookType) *Preset {
+func New(newRequest func(uniqueId string) (*http.Request, error), hook syncedtrace.TraceHookType, tlsConfig *tls.Config) *Preset {
 	rand.Seed(time.Now().UTC().UnixNano())
-	return &Preset{ResultCh: make(chan *engine.TraceResult), NewRequest: newRequest, Hook: hook}
+	return &Preset{ResultCh: make(chan *engine.TraceResult), NewRequest: newRequest, Hook: hook, TLSConfig: tlsConfig}
 }
 
 func (p *Preset) RequestPerDuration(reqDelay time.Duration, duration time.Duration) *PresetResult {
@@ -61,7 +63,7 @@ func (p *Preset) RequestPerDuration(reqDelay time.Duration, duration time.Durati
 
 	start := time.Now()
 
-	engine.HttpBench(syncConfig, reqDelay, p.NewRequest)
+	engine.HttpBench(syncConfig, reqDelay, p.NewRequest, p.TLSConfig)
 	syncConfig.WaitAll()
 
 	close(p.ResultCh)
@@ -83,7 +85,7 @@ func (p *Preset) ConcurrentRequestsUnsynced(maxConcurrencyLimit uint64, reqDelay
 
 	start := time.Now()
 
-	engine.HttpBench(syncConfig, reqDelay, p.NewRequest)
+	engine.HttpBench(syncConfig, reqDelay, p.NewRequest, p.TLSConfig)
 
 	syncConfig.WaitAll()
 
@@ -106,7 +108,7 @@ func (p *Preset) ConcurrentRequestsSynced(concurrencyLimit uint64, reqDelay time
 
 	start := time.Now()
 
-	engine.HttpBench(syncConfig, reqDelay, p.NewRequest)
+	engine.HttpBench(syncConfig, reqDelay, p.NewRequest, p.TLSConfig)
 
 	syncConfig.WaitAll()
 
@@ -129,7 +131,7 @@ func (p *Preset) ConcurrentRequestsSyncedOnce(concurrencyLimit uint64, reqDelay 
 
 	start := time.Now()
 
-	engine.HttpBench(syncConfig, reqDelay, p.NewRequest)
+	engine.HttpBench(syncConfig, reqDelay, p.NewRequest, p.TLSConfig)
 
 	syncConfig.WaitAll()
 
@@ -157,7 +159,7 @@ func (p *Preset) RequestsForTimeGraph(hitsGraph HitsGraph) *PresetResult {
 	for _, point := range hitsGraph {
 		syncConfig := syncConcurrent.NewSyncConfig(p.Hook, 0, 0, false, p.ResultCh)
 		syncConfig.SetSyncedConcurrent(point.Concurrent)
-		go engine.HttpBench(syncConfig, 0, p.NewRequest)
+		go engine.HttpBench(syncConfig, 0, p.NewRequest, p.TLSConfig)
 		time.Sleep(point.Time)
 	}
 
@@ -195,7 +197,7 @@ func (p *Preset) ConcurrentForTimeGraph(concurrentGraph ConcurrentGraph) *Preset
 		}
 	}()
 
-	engine.HttpBench(syncConfig, 0, p.NewRequest)
+	engine.HttpBench(syncConfig, 0, p.NewRequest, p.TLSConfig)
 	syncConfig.WaitAll()
 
 	close(p.ResultCh)
